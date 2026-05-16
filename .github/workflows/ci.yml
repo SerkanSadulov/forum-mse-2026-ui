@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel in-progress runs for the same ref when a new commit lands.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Lint, unit tests, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm run test:ci
+
+      - name: Production build
+        run: npm run build:prod
+
+      - name: Upload production bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/forum-mse-2026-ui/browser
+          if-no-files-found: error
+          retention-days: 7
+
+  e2e:
+    name: Cypress e2e
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      # cypress-io/github-action handles npm ci, browser binary caching,
+      # dev-server startup, wait-on, and the Cypress run in one step.
+      - name: Run Cypress
+        uses: cypress-io/github-action@v6
+        with:
+          install-command: npm ci
+          build: npm run build:prod
+          start: npm start
+          wait-on: 'http://localhost:4200'
+          wait-on-timeout: 120
+          browser: chrome
