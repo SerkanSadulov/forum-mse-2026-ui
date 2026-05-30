@@ -25,8 +25,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: ng
-    - run: ng build
-    - run: ng test --watch=false
-    - run: eslint \"src/**/*.{ts,html}\" \"cypress/**/*.ts\"
-    - run: start-server-and-test \"ng serve --port 4200 --proxy-config src/proxy.conf.json\" http-get://localhost:4200 \"cypress run\"
+    - run: npm run ng
+    - run: npm run ng build
+    - run: npm run ng test --watch=false
+    - run: npm run eslint \"src/**/*.{ts,html}\" \"cypress/**/*.ts\"
+    - run: npm run start-server-and-test \"ng serve --port 4200 --proxy-config src/proxy.conf.json\" http-get://localhost:4200 \"cypress run\"
