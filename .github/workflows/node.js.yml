@@ -25,7 +25,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm run ng
     - run: npm run ng build
     - run: npm run ng test --watch=false
     - run: npm run eslint \"src/**/*.{ts,html}\" \"cypress/**/*.ts\"
