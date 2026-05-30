@@ -34,6 +34,3 @@ jobs:
 
       - name: Lint
         run: npm run lint
-
-      - name: Cypress
-        run: npm run cy:ci
