@@ -6,7 +6,7 @@
 set -eu
 
 BACKEND_BASE_URL="${BACKEND_BASE_URL:-}"
-BACKEND_UPSTREAM="${BACKEND_UPSTREAM:-http://backend:9000}"
+BACKEND_UPSTREAM="${BACKEND_UPSTREAM:-http://forum-local:9000}"
 
 CONFIG_FILE="/usr/share/nginx/html/config.js"
 cat > "$CONFIG_FILE" <<EOF

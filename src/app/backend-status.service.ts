@@ -36,6 +36,6 @@ export class BackendStatusService {
   }
 
   listPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(this.url('/posts'));
+    return this.http.get<Post[]>(this.url('/post'));
   }
 }
